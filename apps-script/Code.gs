@@ -4,17 +4,14 @@
  *
  * Abas criadas na planilha:
  *  - Confirmações : quem vai / não vai
- *  - Presentes    : quem escolheu cada presente (apague a linha para liberar o item)
  *  - Recados      : mural de recados (escreva qualquer coisa na coluna "Ocultar" para esconder um recado)
  */
 
 const ABA_RSVP = "Confirmações";
-const ABA_PRESENTES = "Presentes";
 const ABA_RECADOS = "Recados";
 
 const CABECALHOS = {
   [ABA_RSVP]: ["Data", "Nome", "Vai?", "Pessoas", "Telefone", "Observação"],
-  [ABA_PRESENTES]: ["Data", "ID do presente", "Presente", "Quem vai dar"],
   [ABA_RECADOS]: ["Data", "Nome", "Recado", "Ocultar"],
 };
 
@@ -54,10 +51,6 @@ function limpo(v, max) {
 
 function doGet() {
   try {
-    const presentes = linhas(aba(ABA_PRESENTES))
-      .map((r) => String(r[1]))
-      .filter(String);
-
     const recados = linhas(aba(ABA_RECADOS))
       .filter((r) => r[2] && !String(r[3]).trim())
       .map((r) => ({
@@ -68,7 +61,7 @@ function doGet() {
       .reverse()
       .slice(0, 300);
 
-    return json({ ok: true, gifts: presentes, messages: recados });
+    return json({ ok: true, messages: recados });
   } catch (err) {
     return json({ ok: false, error: String(err) });
   }
@@ -91,16 +84,6 @@ function doPost(e) {
         limpo(d.telefone, 20),
         limpo(d.obs, 300),
       ]);
-      return json({ ok: true });
-    }
-
-    if (d.action === "gift") {
-      if (!d.nome || !d.giftId) return json({ ok: false, error: "dados" });
-      const sh = aba(ABA_PRESENTES);
-      const id = limpo(d.giftId, 60);
-      const jaTem = linhas(sh).some((r) => String(r[1]) === id);
-      if (jaTem) return json({ ok: false, error: "reservado" });
-      sh.appendRow([agora, id, limpo(d.giftNome, 80), limpo(d.nome, 60)]);
       return json({ ok: true });
     }
 

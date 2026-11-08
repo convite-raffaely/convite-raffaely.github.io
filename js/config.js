@@ -5,20 +5,27 @@ window.CONFIG = {
   nome: "Raffaely",
 
   // Data e hora da festa (formato: AAAA-MM-DDTHH:MM:SS-03:00)
-  dataISO: "2026-12-12T20:00:00-03:00",
-  dataTexto: "Sábado, 12 de dezembro de 2026",
-  horario: "20h00",
+  dataISO: "2027-01-09T16:30:00-03:00",
+  dataTexto: "Sábado, 9 de janeiro de 2027",
+  horario: "16h30",
 
   // Local
-  local: "Nome do salão de festas",
-  endereco: "Rua Exemplo, 123 — Bairro — Cotia/SP",
-  mapsUrl: "", // cole aqui o link do Google Maps (opcional)
+  local: "Mansão Copacabana",
+  endereco: "Estr. Fernando Nobre, 710 — Parque Rincão, Cotia/SP — 06705-490",
+  mapsUrl: "https://maps.app.goo.gl/JuWpnW15Sf1jWWSZ9",
+  mapaBusca: "Mansão Copacabana, Estr. Fernando Nobre, 710 - Parque Rincão, Cotia - SP, 06705-490",
 
-  traje: "Esporte fino",
-  confirmarAte: "30 de novembro",
+  traje: "Fino",
+  tema: "Cinderela",
+  confirmarAte: "2 de janeiro de 2027",
 
-  // Foto da aniversariante (opcional). Ex.: "assets/rafaelly.jpg"
-  foto: "",
+  // Fotos
+  foto: "assets/raffaely-retrato.webp",
+  galeria: [
+    "assets/raffaely-1.webp",
+    "assets/raffaely-2.webp",
+    "assets/raffaely-3.webp",
+  ],
 
   // Link do Google Apps Script (veja o README.md).
   // Enquanto estiver vazio, o site funciona em "modo demonstração":
@@ -30,21 +37,43 @@ window.CONFIG = {
     chaveCopia: "56101358852",
     titular: "Raffaely Otremba Sousa",
     banco: "Banco Inter",
+    // Dados usados para gerar o QR Code com valor (não mude)
+    nomeRecebedor: "RAFFAELY O SOUSA",
+    cidade: "COTIA",
     copiaECola:
       "00020101021126330014br.gov.bcb.pix0111561013588525204000053039865802BR5916RAFFAELY O SOUSA6005COTIA62070503***63041B76",
     qr: "assets/pix-qr.png",
   },
 
-  // Lista de presentes — troque pelos itens que ela quer.
-  // "id" precisa ser único e não deve mudar depois que o site estiver no ar.
+  // Sugestões de presente — cada uma abre o Pix já com o valor de referência.
+  // "valor" em reais (use ponto para centavos, ex.: 79.90).
   presentes: [
-    { id: "perfume", nome: "Perfume", detalhe: "Floral ou frutado", emoji: "🌸", link: "" },
-    { id: "maquiagem", nome: "Kit de maquiagem", detalhe: "Paleta de sombras + gloss", emoji: "💄", link: "" },
-    { id: "skincare", nome: "Kit skincare", detalhe: "Hidratante, sérum e protetor", emoji: "🧴", link: "" },
-    { id: "fone", nome: "Fone bluetooth", detalhe: "Cor rosa ou branca", emoji: "🎧", link: "" },
-    { id: "bolsa", nome: "Bolsa", detalhe: "Transversal pequena", emoji: "👜", link: "" },
-    { id: "colar", nome: "Colar delicado", detalhe: "Prata ou dourado", emoji: "📿", link: "" },
-    { id: "livro", nome: "Livros", detalhe: "Romance ou fantasia", emoji: "📚", link: "" },
-    { id: "secador", nome: "Secador / chapinha", detalhe: "Bivolt", emoji: "✨", link: "" },
+    {
+      categoria: "Acessórios e beleza",
+      itens: [
+        { nome: "Colar com pingente", valor: 120, emoji: "📿" },
+        { nome: "Pulseira", valor: 90, emoji: "💫" },
+        { nome: "Brincos", valor: 70, emoji: "💎" },
+        { nome: "Relógio feminino", valor: 200, emoji: "⌚" },
+        { nome: "Bolsa de festa", valor: 150, emoji: "👛" },
+        { nome: "Perfume", valor: 180, emoji: "🌸" },
+        { nome: "Kit de maquiagem", valor: 150, emoji: "💄" },
+        { nome: "Necessaire", valor: 60, emoji: "🧴" },
+        { nome: "Óculos de sol", valor: 120, emoji: "🕶️" },
+      ],
+    },
+    {
+      categoria: "Roupas e calçados",
+      itens: [
+        { nome: "Tênis casual", valor: 250, emoji: "👟" },
+        { nome: "Sandália", valor: 120, emoji: "👡" },
+        { nome: "Bolsa feminina", valor: 180, emoji: "👜" },
+        { nome: "Vestido", valor: 200, emoji: "👗" },
+        { nome: "Conjunto de roupas", valor: 150, emoji: "👚" },
+        { nome: "Pijama bonito", valor: 90, emoji: "🌙" },
+        { nome: "Jaqueta", valor: 200, emoji: "🧥" },
+        { nome: "Carteira", valor: 80, emoji: "💳" },
+      ],
+    },
   ],
 };

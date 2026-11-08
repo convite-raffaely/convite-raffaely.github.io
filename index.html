@@ -4,10 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>15 anos da Raffaely</title>
-  <meta name="description" content="Você está convidado para os 15 anos da Raffaely! Confirme sua presença, veja a lista de presentes e deixe um recado." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Você está convidado para os 15 anos da Raffaely! 9 de janeiro de 2027, às 16h30, na Mansão Copacabana." />
+  <meta property="og:type" content="website" />
   <meta property="og:title" content="15 anos da Raffaely ✨" />
-  <meta property="og:description" content="Confirme sua presença e deixe um recado para a aniversariante." />
-  <meta name="theme-color" content="#6b2d5c" />
+  <meta property="og:description" content="Sábado, 9 de janeiro de 2027 · 16h30 · Mansão Copacabana. Confirme sua presença!" />
+  <meta property="og:image" content="https://otremba.github.io/Rafa-site/assets/og.jpg" />
+  <meta name="theme-color" content="#1f3763" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,7 +33,9 @@
   <header class="hero" id="topo">
     <div class="sparkles" aria-hidden="true"></div>
     <div class="hero-inner">
-      <img id="hero-foto" class="hero-foto" alt="" hidden />
+      <div class="hero-frame" id="hero-frame" hidden>
+        <img id="hero-foto" class="hero-foto" alt="" />
+      </div>
       <p class="hero-kicker">Você está convidado para os</p>
       <p class="hero-15" aria-hidden="true">15</p>
       <p class="hero-kicker">anos de</p>
@@ -53,7 +58,7 @@
     <!-- A FESTA -->
     <section class="section" id="festa">
       <h2 class="title">A festa</h2>
-      <p class="subtitle">Uma noite especial para celebrar esse momento único</p>
+      <p class="subtitle">Um conto de fadas para celebrar esse momento único</p>
       <div class="info-grid">
         <div class="info-card">
           <div class="info-icon" aria-hidden="true">📅</div>
@@ -65,15 +70,26 @@
           <div class="info-icon" aria-hidden="true">📍</div>
           <h3>Onde</h3>
           <p data-cfg="local"></p>
-          <p class="muted" data-cfg="endereco"></p>
-          <a id="maps-link" class="link" target="_blank" rel="noopener" hidden>Ver no mapa →</a>
+          <p class="muted small" data-cfg="endereco"></p>
         </div>
         <div class="info-card">
           <div class="info-icon" aria-hidden="true">👗</div>
           <h3>Traje</h3>
           <p data-cfg="traje"></p>
         </div>
+        <div class="info-card">
+          <div class="info-icon" aria-hidden="true">👑</div>
+          <h3>Tema</h3>
+          <p data-cfg="tema"></p>
+        </div>
       </div>
+
+      <div class="map card" id="map-wrap" hidden>
+        <iframe id="map" title="Mapa do local da festa" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <a id="maps-link" class="btn" target="_blank" rel="noopener">Como chegar</a>
+      </div>
+
+      <div class="gallery" id="gallery" hidden></div>
     </section>
 
     <!-- PRESENÇA -->
@@ -121,15 +137,15 @@
     <!-- PRESENTES -->
     <section class="section" id="presentes">
       <h2 class="title">Presentes</h2>
-      <p class="subtitle">Sua presença é o mais importante! Mas, se quiser presentear, fique à vontade 💝</p>
+      <p class="subtitle">Sua presença é o mais importante! Mas, se quiser presentear, os presentes são recebidos via Pix 💙</p>
 
       <div class="pix card">
         <div class="pix-qr">
-          <img id="pix-qr" alt="QR Code Pix" width="220" height="220" />
+          <img id="pix-qr" alt="QR Code Pix" width="200" height="200" />
         </div>
         <div class="pix-info">
           <h3>Presente em Pix</h3>
-          <p class="muted">Escolha o valor no seu aplicativo do banco.</p>
+          <p class="muted">Qualquer valor — você escolhe no app do banco.</p>
           <dl>
             <dt>Chave (CPF)</dt><dd id="pix-chave"></dd>
             <dt>Nome</dt><dd id="pix-titular"></dd>
@@ -139,13 +155,12 @@
             <button class="btn" type="button" id="copy-key">Copiar chave Pix</button>
             <button class="btn btn-ghost" type="button" id="copy-code">Pix copia e cola</button>
           </div>
-          <p class="form-msg" id="pix-msg" role="status"></p>
         </div>
       </div>
 
-      <h3 class="list-title">Ou escolha um presente da lista</h3>
-      <p class="subtitle small">Ao escolher, o item fica marcado para que ninguém repita.</p>
-      <div id="gift-grid" class="gift-grid"></div>
+      <h3 class="list-title">Sugestões de presente</h3>
+      <p class="subtitle small">Cada sugestão tem um valor de referência. Toque em uma para fazer o Pix já com o valor.</p>
+      <div id="gift-list"></div>
     </section>
 
     <!-- RECADOS -->
@@ -175,24 +190,23 @@
     <p>15 anos · <span data-cfg="dataTexto"></span></p>
   </footer>
 
-  <!-- Janela para reservar presente -->
+  <!-- Janela do Pix de um presente -->
   <dialog id="gift-dialog" class="dialog">
-    <form method="dialog" id="gift-form" class="form">
-      <h3>Vou dar <span id="gift-dialog-name"></span></h3>
-      <p class="muted">Deixe seu nome para marcarmos este presente como escolhido.</p>
-      <label class="field">
-        <span>Seu nome</span>
-        <input name="nome" required maxlength="60" autocomplete="name" />
-      </label>
-      <div class="dialog-actions">
-        <button class="btn btn-ghost" type="button" id="gift-cancel">Cancelar</button>
-        <button class="btn" type="submit">Confirmar</button>
-      </div>
-      <p class="form-msg" role="status"></p>
-    </form>
+    <div class="gift-dialog">
+      <button class="dialog-close" type="button" id="gift-close" aria-label="Fechar">×</button>
+      <div class="gift-emoji" id="gd-emoji" aria-hidden="true"></div>
+      <h3 id="gd-nome"></h3>
+      <p class="gd-valor" id="gd-valor"></p>
+      <div class="pix-qr gd-qr" id="gd-qr"></div>
+      <p class="muted small">Aponte a câmera do app do banco para o QR Code, ou copie o código abaixo e use <strong>Pix → Copia e Cola</strong>.</p>
+      <button class="btn" type="button" id="gd-copy">Copiar código Pix</button>
+      <p class="muted small">Quer mandar outro valor? É só mudar no app antes de confirmar, ou usar a chave <strong id="gd-chave"></strong>.</p>
+    </div>
   </dialog>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
   <script src="js/config.js"></script>
+  <script src="js/pix.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

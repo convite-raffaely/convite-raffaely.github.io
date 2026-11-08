@@ -4,22 +4,46 @@
   const C = window.CONFIG;
   const DEMO = !C.apiUrl;
   const $ = (sel, root = document) => root.querySelector(sel);
+  const el = (tag, cls, text) => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  };
 
   /* ---------------- Preenche textos da configuração ---------------- */
-  document.querySelectorAll("[data-cfg]").forEach((el) => {
-    const v = C[el.dataset.cfg];
-    if (v) el.textContent = v;
+  document.querySelectorAll("[data-cfg]").forEach((node) => {
+    const v = C[node.dataset.cfg];
+    if (v) node.textContent = v;
   });
-  if (C.mapsUrl) {
-    const a = $("#maps-link");
-    a.href = C.mapsUrl;
-    a.hidden = false;
-  }
   if (C.foto) {
     const img = $("#hero-foto");
     img.src = C.foto;
     img.alt = C.nome;
-    img.hidden = false;
+    $("#hero-frame").hidden = false;
+  }
+  if (C.mapaBusca || C.mapsUrl) {
+    $("#map-wrap").hidden = false;
+    if (C.mapaBusca) {
+      $("#map").src = "https://www.google.com/maps?q=" + encodeURIComponent(C.mapaBusca) + "&output=embed";
+    } else {
+      $("#map").remove();
+    }
+    $("#maps-link").href =
+      C.mapsUrl || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(C.mapaBusca);
+  }
+  if (C.galeria && C.galeria.length) {
+    const g = $("#gallery");
+    C.galeria.forEach((src, i) => {
+      const fig = el("figure");
+      const img = el("img");
+      img.src = src;
+      img.alt = C.nome + " — foto " + (i + 1);
+      img.loading = "lazy";
+      fig.appendChild(img);
+      g.appendChild(fig);
+    });
+    g.hidden = false;
   }
   if (DEMO) $("#demo-banner").hidden = false;
 
@@ -33,8 +57,7 @@
       $("#countdown").hidden = true;
       const done = $("#countdown-done");
       done.hidden = false;
-      const umDiaDepois = diff < -24 * 3600 * 1000;
-      done.textContent = umDiaDepois ? "Obrigada por celebrar comigo! 💖" : "Hoje é o grande dia! ✨";
+      done.textContent = diff < -24 * 3600 * 1000 ? "Obrigada por celebrar comigo! 💙" : "Hoje é o grande dia! ✨";
       return;
     }
     const s = Math.floor(diff / 1000);
@@ -51,8 +74,7 @@
   function toast(text) {
     let t = $(".toast");
     if (!t) {
-      t = document.createElement("div");
-      t.className = "toast";
+      t = el("div", "toast");
       document.body.appendChild(t);
     }
     t.textContent = text;
@@ -64,10 +86,10 @@
   /* ---------------- API (Google Apps Script) ou modo demo ---------------- */
   const store = {
     get(k, d) {
-      try { return JSON.parse(localStorage.getItem("rafa15:" + k)) ?? d; } catch (e) { return d; }
+      try { return JSON.parse(localStorage.getItem("raffa15:" + k)) ?? d; } catch (e) { return d; }
     },
     set(k, v) {
-      try { localStorage.setItem("rafa15:" + k, JSON.stringify(v)); } catch (e) {}
+      try { localStorage.setItem("raffa15:" + k, JSON.stringify(v)); } catch (e) {}
     },
   };
 
@@ -79,9 +101,7 @@
 
   const api = {
     async load() {
-      if (DEMO) {
-        return { gifts: store.get("gifts", []), messages: store.get("messages", []) };
-      }
+      if (DEMO) return { messages: store.get("messages", []) };
       const r = await withTimeout(fetch(C.apiUrl + "?t=" + Date.now()));
       const data = await r.json();
       if (!data.ok) throw new Error(data.error || "erro");
@@ -90,12 +110,7 @@
     async send(payload) {
       if (DEMO) {
         await new Promise((r) => setTimeout(r, 400));
-        if (payload.action === "gift") {
-          const gifts = store.get("gifts", []);
-          if (gifts.includes(payload.giftId)) return { ok: false, error: "reservado" };
-          gifts.push(payload.giftId);
-          store.set("gifts", gifts);
-        } else if (payload.action === "message") {
+        if (payload.action === "message") {
           const msgs = store.get("messages", []);
           msgs.unshift({ nome: payload.nome, recado: payload.recado, data: new Date().toISOString() });
           store.set("messages", msgs);
@@ -113,9 +128,9 @@
     },
   };
 
-  function setMsg(el, text, kind) {
-    el.textContent = text;
-    el.className = "form-msg" + (kind ? " " + kind : "");
+  function setMsg(node, text, kind) {
+    node.textContent = text;
+    node.className = "form-msg" + (kind ? " " + kind : "");
   }
 
   function requireFields(form, names) {
@@ -132,8 +147,7 @@
   /* ---------------- Confirmação de presença ---------------- */
   const rsvpForm = $("#rsvp-form");
   rsvpForm.addEventListener("change", () => {
-    const vai = rsvpForm.elements.presenca.value === "Sim";
-    $("#rsvp-extra").hidden = !vai;
+    $("#rsvp-extra").hidden = rsvpForm.elements.presenca.value !== "Sim";
   });
   rsvpForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -158,17 +172,20 @@
       const firstName = payload.nome.split(" ")[0];
       rsvpForm.innerHTML = "";
       rsvpForm.classList.add("success");
-      const box = document.createElement("div");
-      box.innerHTML = vai
-        ? '<p class="big">🎉</p><h3></h3><p>Sua presença está confirmada. Mal podemos esperar para celebrar com você!</p>'
-        : '<p class="big">💌</p><h3></h3><p>Que pena! Obrigada por avisar — você pode deixar um recado no mural.</p>';
-      $("h3", box).textContent = vai ? "Oba, " + firstName + "!" : "Obrigada, " + firstName + "!";
-      const again = document.createElement("a");
-      again.href = vai ? "#presentes" : "#recados";
-      again.className = "btn btn-ghost";
-      again.textContent = vai ? "Ver presentes" : "Deixar um recado";
-      box.appendChild(again);
-      rsvpForm.appendChild(box);
+      rsvpForm.append(
+        el("p", "big", vai ? "🎉" : "💌"),
+        el("h3", null, (vai ? "Oba, " : "Obrigada, ") + firstName + "!"),
+        el(
+          "p",
+          null,
+          vai
+            ? "Sua presença está confirmada. Mal podemos esperar para celebrar com você!"
+            : "Que pena! Obrigada por avisar — você pode deixar um recado no mural."
+        )
+      );
+      const next = el("a", "btn btn-ghost", vai ? "Ver presentes" : "Deixar um recado");
+      next.href = vai ? "#presentes" : "#recados";
+      rsvpForm.appendChild(next);
     } catch (err) {
       btn.disabled = false;
       setMsg(msg, "Não foi possível enviar agora. Tente novamente em instantes.", "err");
@@ -200,112 +217,79 @@
     }
   }
   $("#copy-key").addEventListener("click", async () => {
-    const ok = await copy(C.pix.chaveCopia);
-    toast(ok ? "Chave Pix copiada! 💖" : "Copie manualmente: " + C.pix.chave);
+    toast((await copy(C.pix.chaveCopia)) ? "Chave Pix copiada! 💙" : "Copie manualmente: " + C.pix.chave);
   });
   $("#copy-code").addEventListener("click", async () => {
-    const ok = await copy(C.pix.copiaECola);
-    toast(ok ? "Código copia e cola copiado!" : "Não foi possível copiar");
-    if (ok) setMsg($("#pix-msg"), "No app do banco, escolha Pix → Copia e Cola e cole o código.", "ok");
+    toast((await copy(C.pix.copiaECola)) ? "Código Pix copiado! Use Pix → Copia e Cola" : "Não foi possível copiar");
   });
 
-  /* ---------------- Lista de presentes ---------------- */
-  let reserved = new Set();
-  const grid = $("#gift-grid");
+  /* ---------------- Sugestões de presente (Pix com valor) ---------------- */
+  const brl = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const giftList = $("#gift-list");
+  const dialog = $("#gift-dialog");
+  let currentCode = "";
 
-  function renderGifts() {
-    grid.innerHTML = "";
-    C.presentes.forEach((g) => {
-      const taken = reserved.has(g.id);
-      const card = document.createElement("article");
-      card.className = "gift" + (taken ? " taken" : "");
-
-      const emoji = document.createElement("div");
-      emoji.className = "gift-emoji";
-      emoji.textContent = g.emoji || "🎁";
-      emoji.setAttribute("aria-hidden", "true");
-      const h = document.createElement("h4");
-      h.textContent = g.nome;
-      const p = document.createElement("p");
-      p.textContent = g.detalhe || "";
-      card.append(emoji, h, p);
-
-      if (g.link && !taken) {
-        const a = document.createElement("a");
-        a.className = "link";
-        a.href = g.link;
-        a.target = "_blank";
-        a.rel = "noopener";
-        a.textContent = "Ver sugestão →";
-        card.appendChild(a);
-      }
-
-      if (taken) {
-        const t = document.createElement("div");
-        t.className = "gift-taken-label";
-        t.textContent = "Já escolhido 💝";
-        card.appendChild(t);
-      } else {
-        const b = document.createElement("button");
-        b.className = "btn btn-small";
-        b.type = "button";
-        b.textContent = "Vou dar este";
-        b.addEventListener("click", () => openGiftDialog(g));
-        card.appendChild(b);
-      }
-      grid.appendChild(card);
+  function codeFor(valor) {
+    return window.Pix.brCode({
+      chave: C.pix.chaveCopia,
+      nome: C.pix.nomeRecebedor,
+      cidade: C.pix.cidade,
+      valor,
     });
   }
 
-  const dialog = $("#gift-dialog");
-  const giftForm = $("#gift-form");
-  let currentGift = null;
+  function qrSvg(text) {
+    if (typeof window.qrcode !== "function") return null;
+    const qr = window.qrcode(0, "M");
+    qr.addData(text);
+    qr.make();
+    return qr.createSvgTag({ cellSize: 5, margin: 0, scalable: true });
+  }
 
-  function openGiftDialog(g) {
-    currentGift = g;
-    $("#gift-dialog-name").textContent = g.nome.toLowerCase();
-    setMsg($(".form-msg", giftForm), "");
-    giftForm.elements.nome.classList.remove("invalid");
-    $("button[type=submit]", giftForm).disabled = false;
+  function openGift(item) {
+    currentCode = codeFor(item.valor);
+    $("#gd-emoji").textContent = item.emoji || "🎁";
+    $("#gd-nome").textContent = item.nome;
+    $("#gd-valor").textContent = brl(item.valor);
+    $("#gd-chave").textContent = C.pix.chave;
+    const box = $("#gd-qr");
+    const svg = qrSvg(currentCode);
+    if (svg) {
+      box.innerHTML = svg;
+      box.hidden = false;
+    } else {
+      box.hidden = true;
+    }
     if (typeof dialog.showModal === "function") dialog.showModal();
     else dialog.setAttribute("open", "");
-    giftForm.elements.nome.focus();
   }
-  function closeGiftDialog() {
+  function closeGift() {
     if (typeof dialog.close === "function") dialog.close();
     else dialog.removeAttribute("open");
   }
-  $("#gift-cancel").addEventListener("click", closeGiftDialog);
+  $("#gift-close").addEventListener("click", closeGift);
+  dialog.addEventListener("click", (e) => { if (e.target === dialog) closeGift(); });
+  $("#gd-copy").addEventListener("click", async () => {
+    toast((await copy(currentCode)) ? "Código copiado! Use Pix → Copia e Cola" : "Não foi possível copiar");
+  });
 
-  giftForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const msg = $(".form-msg", giftForm);
-    if (!requireFields(giftForm, ["nome"])) return setMsg(msg, "Por favor, preencha seu nome.", "err");
-    const btn = $("button[type=submit]", giftForm);
-    btn.disabled = true;
-    setMsg(msg, "Enviando…");
-    try {
-      const res = await api.send({
-        action: "gift",
-        giftId: currentGift.id,
-        giftNome: currentGift.nome,
-        nome: giftForm.elements.nome.value.trim(),
-      });
-      if (!res.ok && res.error === "reservado") {
-        reserved.add(currentGift.id);
-        renderGifts();
-        setMsg(msg, "Ops! Alguém acabou de escolher este presente. Escolha outro 💕", "err");
-        return;
-      }
-      if (!res.ok) throw new Error(res.error);
-      reserved.add(currentGift.id);
-      renderGifts();
-      closeGiftDialog();
-      toast("Obrigada! Presente reservado 🎁");
-    } catch (err) {
-      btn.disabled = false;
-      setMsg(msg, "Não foi possível enviar agora. Tente novamente.", "err");
-    }
+  C.presentes.forEach((grupo) => {
+    giftList.appendChild(el("h4", "gift-cat", grupo.categoria));
+    const grid = el("div", "gift-grid");
+    grupo.itens.forEach((item) => {
+      const card = el("button", "gift");
+      card.type = "button";
+      card.setAttribute("aria-label", item.nome + ", " + brl(item.valor) + ". Presentear via Pix");
+      card.append(
+        el("span", "gift-emoji", item.emoji || "🎁"),
+        el("span", "gift-name", item.nome),
+        el("span", "gift-price", brl(item.valor)),
+        el("span", "gift-cta", "Presentear via Pix →")
+      );
+      card.addEventListener("click", () => openGift(item));
+      grid.appendChild(card);
+    });
+    giftList.appendChild(grid);
   });
 
   /* ---------------- Mural de recados ---------------- */
@@ -321,25 +305,17 @@
   function renderMessages() {
     list.innerHTML = "";
     if (!messages.length) {
-      const p = document.createElement("p");
-      p.className = "msg-empty";
-      p.textContent = "Seja a primeira pessoa a deixar um recado! ✍️";
-      list.appendChild(p);
+      list.appendChild(el("p", "msg-empty", "Seja a primeira pessoa a deixar um recado! ✍️"));
       return;
     }
     messages.forEach((m) => {
-      const el = document.createElement("article");
-      el.className = "msg";
-      const p = document.createElement("p");
-      p.textContent = m.recado;
-      const f = document.createElement("footer");
-      const s = document.createElement("strong");
-      s.textContent = m.nome;
-      f.append("— ", s);
+      const card = el("article", "msg");
+      const foot = el("footer");
+      foot.append("— ", el("strong", null, m.nome));
       const when = fmtDate(m.data);
-      if (when) f.append(" · " + when);
-      el.append(p, f);
-      list.appendChild(el);
+      if (when) foot.append(" · " + when);
+      card.append(el("p", null, m.recado), foot);
+      list.appendChild(card);
     });
   }
 
@@ -362,7 +338,7 @@
       messages.unshift({ nome: payload.nome, recado: payload.recado, data: new Date().toISOString() });
       renderMessages();
       msgForm.elements.recado.value = "";
-      setMsg(msg, "Recado enviado! Obrigada pelo carinho 💖", "ok");
+      setMsg(msg, "Recado enviado! Obrigada pelo carinho 💙", "ok");
     } catch (err) {
       setMsg(msg, "Não foi possível enviar agora. Tente novamente.", "err");
     } finally {
@@ -378,21 +354,15 @@
   );
 
   /* ---------------- Carregamento inicial ---------------- */
-  renderGifts();
-  list.innerHTML = '<p class="msg-empty">Carregando recados…</p>';
+  list.appendChild(el("p", "msg-empty", "Carregando recados…"));
   api
     .load()
     .then((data) => {
-      reserved = new Set(data.gifts || []);
       messages = data.messages || [];
-      renderGifts();
       renderMessages();
     })
     .catch(() => {
       list.innerHTML = "";
-      const p = document.createElement("p");
-      p.className = "msg-empty";
-      p.textContent = "Não foi possível carregar os recados agora.";
-      list.appendChild(p);
+      list.appendChild(el("p", "msg-empty", "Não foi possível carregar os recados agora."));
     });
 })();

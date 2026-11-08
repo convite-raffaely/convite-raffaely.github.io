@@ -1,19 +1,22 @@
-# Site dos 15 anos da Raffaely
+# Site dos 15 anos da Raffaely 👑
 
 Site de uma página com:
 
 - **Informações da festa** e contagem regressiva
 - **Confirmação de presença**
-- **Presentes**: Pix (QR Code, chave e "copia e cola") e lista de presentes que o convidado pode reservar
+- **Presentes via Pix**: QR Code e chave para qualquer valor, e uma lista de sugestões com valor de referência — cada item abre um QR Code Pix já com o valor
+- **Galeria** com fotos da aniversariante e **mapa** do local
 - **Mural de recados** para a aniversariante
 
-As respostas vão para uma **Planilha Google**, que a família pode abrir para ver quem confirmou, quem escolheu cada presente e os recados.
+As respostas vão para uma **Planilha Google**, que a família pode abrir para ver quem confirmou presença e os recados.
 
 ## 1. Editar as informações
 
 Tudo o que muda fica em [`js/config.js`](js/config.js): data, horário, local, link do mapa, traje, prazo para confirmar, foto e lista de presentes.
 
-Para usar uma foto, coloque o arquivo na pasta `assets/` (ex.: `assets/rafaelly.jpg`) e preencha `foto: "assets/rafaelly.jpg"`.
+Para usar uma foto, coloque o arquivo na pasta `assets/` e coloque o caminho em `foto` (retrato do topo) ou em `galeria`.
+
+Os valores das sugestões de presente ficam em `presentes` → `valor`.
 
 ## 2. Ligar a Planilha Google (confirmações, presentes e recados)
 
@@ -22,7 +25,7 @@ Sem este passo o site funciona em **modo demonstração** (aparece uma faixa ama
 1. Crie uma planilha nova em <https://sheets.new> (ex.: "15 anos Raffaely").
 2. No menu, vá em **Extensões → Apps Script**.
 3. Apague o código que aparece e cole todo o conteúdo de [`apps-script/Code.gs`](apps-script/Code.gs). Salve (💾).
-4. No seletor de funções no topo, escolha **`setup`** e clique em **Executar**. Autorize com sua conta Google (em "O Google não verificou este app", clique em *Avançado → Acessar*). As abas *Confirmações*, *Presentes* e *Recados* aparecem na planilha.
+4. No seletor de funções no topo, escolha **`setup`** e clique em **Executar**. Autorize com sua conta Google (em "O Google não verificou este app", clique em *Avançado → Acessar*). As abas *Confirmações* e *Recados* aparecem na planilha.
 5. Clique em **Implantar → Nova implantação** → ícone de engrenagem → **App da Web**:
    - *Executar como*: **Eu**
    - *Quem pode acessar*: **Qualquer pessoa**
@@ -33,7 +36,6 @@ Sem este passo o site funciona em **modo demonstração** (aparece uma faixa ama
 
 ### Administrar pela planilha
 
-- **Liberar um presente** reservado: apague a linha dele na aba *Presentes*.
 - **Esconder um recado**: escreva qualquer coisa (ex.: `x`) na coluna *Ocultar*.
 - **Total de convidados**: na aba *Confirmações*, some a coluna *Pessoas* das linhas com *Sim*.
 
