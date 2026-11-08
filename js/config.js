@@ -46,33 +46,34 @@ window.CONFIG = {
   },
 
   // Sugestões de presente — cada uma abre o Pix já com o valor de referência.
+  // Fotos: Unsplash (licença gratuita), em assets/presentes/.
   // "valor" em reais (use ponto para centavos, ex.: 79.90).
   presentes: [
     {
       categoria: "Acessórios e beleza",
       itens: [
-        { nome: "Colar com pingente", valor: 120, emoji: "📿" },
-        { nome: "Pulseira", valor: 90, emoji: "💫" },
-        { nome: "Brincos", valor: 70, emoji: "💎" },
-        { nome: "Relógio feminino", valor: 200, emoji: "⌚" },
-        { nome: "Bolsa de festa", valor: 150, emoji: "👛" },
-        { nome: "Perfume", valor: 180, emoji: "🌸" },
-        { nome: "Kit de maquiagem", valor: 150, emoji: "💄" },
-        { nome: "Necessaire", valor: 60, emoji: "🧴" },
-        { nome: "Óculos de sol", valor: 120, emoji: "🕶️" },
+        { nome: "Colar com pingente", valor: 120, imagem: "assets/presentes/colar.webp" },
+        { nome: "Pulseira", valor: 90, imagem: "assets/presentes/pulseira.webp" },
+        { nome: "Brincos", valor: 70, imagem: "assets/presentes/brincos.webp" },
+        { nome: "Relógio feminino", valor: 200, imagem: "assets/presentes/relogio.webp" },
+        { nome: "Bolsa de festa", valor: 150, imagem: "assets/presentes/bolsa-festa.webp" },
+        { nome: "Perfume", valor: 180, imagem: "assets/presentes/perfume.webp" },
+        { nome: "Kit de maquiagem", valor: 150, imagem: "assets/presentes/maquiagem.webp" },
+        { nome: "Necessaire", valor: 60, imagem: "assets/presentes/necessaire.webp" },
+        { nome: "Óculos de sol", valor: 120, imagem: "assets/presentes/oculos.webp" },
       ],
     },
     {
       categoria: "Roupas e calçados",
       itens: [
-        { nome: "Tênis casual", valor: 250, emoji: "👟" },
-        { nome: "Sandália", valor: 120, emoji: "👡" },
-        { nome: "Bolsa feminina", valor: 180, emoji: "👜" },
-        { nome: "Vestido", valor: 200, emoji: "👗" },
-        { nome: "Conjunto de roupas", valor: 150, emoji: "👚" },
-        { nome: "Pijama bonito", valor: 90, emoji: "🌙" },
-        { nome: "Jaqueta", valor: 200, emoji: "🧥" },
-        { nome: "Carteira", valor: 80, emoji: "💳" },
+        { nome: "Tênis casual", valor: 250, imagem: "assets/presentes/tenis.webp" },
+        { nome: "Sandália", valor: 120, imagem: "assets/presentes/sandalia.webp" },
+        { nome: "Bolsa feminina", valor: 180, imagem: "assets/presentes/bolsa.webp" },
+        { nome: "Vestido", valor: 200, imagem: "assets/presentes/vestido.webp" },
+        { nome: "Conjunto de roupas", valor: 150, imagem: "assets/presentes/conjunto.webp" },
+        { nome: "Pijama bonito", valor: 90, imagem: "assets/presentes/pijama.webp" },
+        { nome: "Jaqueta", valor: 200, imagem: "assets/presentes/jaqueta.webp" },
+        { nome: "Carteira", valor: 80, imagem: "assets/presentes/carteira.webp" },
       ],
     },
   ],

@@ -52,3 +52,8 @@ Abra o `index.html` no navegador, ou rode na pasta:
 ```bash
 npx serve .
 ```
+
+## Créditos das imagens
+
+- Fotos das sugestões de presente: [Unsplash](https://unsplash.com) (licença Unsplash, uso gratuito), em `assets/presentes/`.
+- Ícones: [Phosphor Icons](https://phosphoricons.com) (licença MIT), em `assets/icons/`.

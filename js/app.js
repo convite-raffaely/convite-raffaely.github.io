@@ -11,6 +11,24 @@
     return e;
   };
 
+  const bigIcon = (name) => {
+    const wrap = el("div", "big");
+    const img = el("img");
+    img.src = "assets/icons/" + name + ".svg";
+    img.alt = "";
+    wrap.appendChild(img);
+    return wrap;
+  };
+  const giftImg = (item) => {
+    const img = el("img", "gift-img");
+    img.src = item.imagem;
+    img.alt = "";
+    img.loading = "lazy";
+    img.width = 320;
+    img.height = 320;
+    return img;
+  };
+
   /* ---------------- Preenche textos da configuração ---------------- */
   document.querySelectorAll("[data-cfg]").forEach((node) => {
     const v = C[node.dataset.cfg];
@@ -57,7 +75,7 @@
       $("#countdown").hidden = true;
       const done = $("#countdown-done");
       done.hidden = false;
-      done.textContent = diff < -24 * 3600 * 1000 ? "Obrigada por celebrar comigo! 💙" : "Hoje é o grande dia! ✨";
+      done.textContent = diff < -24 * 3600 * 1000 ? "Obrigada por celebrar comigo!" : "Hoje é o grande dia!";
       return;
     }
     const s = Math.floor(diff / 1000);
@@ -173,7 +191,7 @@
       rsvpForm.innerHTML = "";
       rsvpForm.classList.add("success");
       rsvpForm.append(
-        el("p", "big", vai ? "🎉" : "💌"),
+        bigIcon(vai ? "confetti" : "envelope-simple-open"),
         el("h3", null, (vai ? "Oba, " : "Obrigada, ") + firstName + "!"),
         el(
           "p",
@@ -217,7 +235,7 @@
     }
   }
   $("#copy-key").addEventListener("click", async () => {
-    toast((await copy(C.pix.chaveCopia)) ? "Chave Pix copiada! 💙" : "Copie manualmente: " + C.pix.chave);
+    toast((await copy(C.pix.chaveCopia)) ? "Chave Pix copiada!" : "Copie manualmente: " + C.pix.chave);
   });
   $("#copy-code").addEventListener("click", async () => {
     toast((await copy(C.pix.copiaECola)) ? "Código Pix copiado! Use Pix → Copia e Cola" : "Não foi possível copiar");
@@ -248,7 +266,9 @@
 
   function openGift(item) {
     currentCode = codeFor(item.valor);
-    $("#gd-emoji").textContent = item.emoji || "🎁";
+    const gi = $("#gd-img");
+    gi.src = item.imagem;
+    gi.alt = item.nome;
     $("#gd-nome").textContent = item.nome;
     $("#gd-valor").textContent = brl(item.valor);
     $("#gd-chave").textContent = C.pix.chave;
@@ -281,7 +301,7 @@
       card.type = "button";
       card.setAttribute("aria-label", item.nome + ", " + brl(item.valor) + ". Presentear via Pix");
       card.append(
-        el("span", "gift-emoji", item.emoji || "🎁"),
+        giftImg(item),
         el("span", "gift-name", item.nome),
         el("span", "gift-price", brl(item.valor)),
         el("span", "gift-cta", "Presentear via Pix →")
@@ -305,7 +325,7 @@
   function renderMessages() {
     list.innerHTML = "";
     if (!messages.length) {
-      list.appendChild(el("p", "msg-empty", "Seja a primeira pessoa a deixar um recado! ✍️"));
+      list.appendChild(el("p", "msg-empty", "Seja a primeira pessoa a deixar um recado!"));
       return;
     }
     messages.forEach((m) => {
@@ -338,7 +358,7 @@
       messages.unshift({ nome: payload.nome, recado: payload.recado, data: new Date().toISOString() });
       renderMessages();
       msgForm.elements.recado.value = "";
-      setMsg(msg, "Recado enviado! Obrigada pelo carinho 💙", "ok");
+      setMsg(msg, "Recado enviado! Obrigada pelo carinho.", "ok");
     } catch (err) {
       setMsg(msg, "Não foi possível enviar agora. Tente novamente.", "err");
     } finally {

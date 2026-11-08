@@ -7,11 +7,11 @@
   <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="Você está convidado para os 15 anos da Raffaely! 9 de janeiro de 2027, às 16h30, na Mansão Copacabana." />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="15 anos da Raffaely ✨" />
+  <meta property="og:title" content="15 anos da Raffaely" />
   <meta property="og:description" content="Sábado, 9 de janeiro de 2027 · 16h30 · Mansão Copacabana. Confirme sua presença!" />
   <meta property="og:image" content="https://convite-raffaely.github.io/assets/og.jpg" />
   <meta name="theme-color" content="#1f3763" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>" />
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -61,24 +61,24 @@
       <p class="subtitle">Um conto de fadas para celebrar esse momento único</p>
       <div class="info-grid">
         <div class="info-card">
-          <div class="info-icon" aria-hidden="true">📅</div>
+          <div class="info-icon"><img src="assets/icons/calendar-heart.svg" alt="" /></div>
           <h3>Quando</h3>
           <p data-cfg="dataTexto"></p>
           <p class="muted">às <span data-cfg="horario"></span></p>
         </div>
         <div class="info-card">
-          <div class="info-icon" aria-hidden="true">📍</div>
+          <div class="info-icon"><img src="assets/icons/map-pin.svg" alt="" /></div>
           <h3>Onde</h3>
           <p data-cfg="local"></p>
           <p class="muted small" data-cfg="endereco"></p>
         </div>
         <div class="info-card">
-          <div class="info-icon" aria-hidden="true">👗</div>
+          <div class="info-icon"><img src="assets/icons/dress.svg" alt="" /></div>
           <h3>Traje</h3>
           <p data-cfg="traje"></p>
         </div>
         <div class="info-card">
-          <div class="info-icon" aria-hidden="true">👑</div>
+          <div class="info-icon"><img src="assets/icons/crown.svg" alt="" /></div>
           <h3>Tema</h3>
           <p data-cfg="tema"></p>
         </div>
@@ -106,8 +106,8 @@
         <fieldset class="field">
           <legend>Você vai?</legend>
           <div class="choice">
-            <label><input type="radio" name="presenca" value="Sim" checked /> <span>Sim, vou! 🎉</span></label>
-            <label><input type="radio" name="presenca" value="Não" /> <span>Não poderei ir 😢</span></label>
+            <label><input type="radio" name="presenca" value="Sim" checked /> <span>Sim, vou!</span></label>
+            <label><input type="radio" name="presenca" value="Não" /> <span>Não poderei ir</span></label>
           </div>
         </fieldset>
 
@@ -137,7 +137,7 @@
     <!-- PRESENTES -->
     <section class="section" id="presentes">
       <h2 class="title">Presentes</h2>
-      <p class="subtitle">Sua presença é o mais importante! Mas, se quiser presentear, os presentes são recebidos via Pix 💙</p>
+      <p class="subtitle">Sua presença é o mais importante! Mas, se quiser presentear, os presentes são recebidos via Pix.</p>
 
       <div class="pix card">
         <div class="pix-qr">
@@ -194,7 +194,7 @@
   <dialog id="gift-dialog" class="dialog">
     <div class="gift-dialog">
       <button class="dialog-close" type="button" id="gift-close" aria-label="Fechar">×</button>
-      <div class="gift-emoji" id="gd-emoji" aria-hidden="true"></div>
+      <img class="gd-img" id="gd-img" alt="" width="132" height="132" />
       <h3 id="gd-nome"></h3>
       <p class="gd-valor" id="gd-valor"></p>
       <div class="pix-qr gd-qr" id="gd-qr"></div>
