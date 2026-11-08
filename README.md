@@ -18,7 +18,7 @@ Para usar uma foto, coloque o arquivo na pasta `assets/` e coloque o caminho em 
 
 Os valores das sugestões de presente ficam em `presentes` → `valor`.
 
-## 2. Ligar a Planilha Google (confirmações, presentes e recados)
+## 2. Ligar a Planilha Google (confirmações e recados)
 
 Sem este passo o site funciona em **modo demonstração** (aparece uma faixa amarela no topo e as respostas ficam salvas só no navegador de quem testou).
 
