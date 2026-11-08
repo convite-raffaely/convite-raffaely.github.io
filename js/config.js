@@ -30,7 +30,7 @@ window.CONFIG = {
   // Link do Google Apps Script (veja o README.md).
   // Enquanto estiver vazio, o site funciona em "modo demonstração":
   // as respostas ficam salvas só no navegador de quem testou.
-  apiUrl: "",
+  apiUrl: "https://script.google.com/macros/s/AKfycbwp0av5-8xbA9PeM6apyAdeKaAofN60vyuxKJL1uWoHvhYxrGIImrEc6p_V_fi9UXQerg/exec",
 
   pix: {
     chave: "561.013.588-52",
