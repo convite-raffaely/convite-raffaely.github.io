@@ -19,6 +19,13 @@ window.CONFIG = {
   tema: "Cinderela",
   confirmarAte: "2 de janeiro de 2027",
 
+  // Música (vídeo oficial do YouTube; o convidado toca no botão para ouvir)
+  musica: {
+    titulo: "Can't Feel My Face",
+    artista: "The Weeknd",
+    youtubeId: "KEI4qSrkPAs",
+  },
+
   // Fotos
   foto: "assets/raffaely-retrato.webp",
   galeria: [

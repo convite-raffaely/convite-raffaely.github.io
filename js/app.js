@@ -312,6 +312,39 @@
     giftList.appendChild(grid);
   });
 
+  /* ---------------- Música ---------------- */
+  if (C.musica && C.musica.youtubeId) {
+    const box = $("#music");
+    const player = $("#music-player");
+    const frame = $("#music-frame");
+    const btn = $("#music-btn");
+    $("#music-title").textContent = C.musica.titulo;
+    $("#music-artist").textContent = C.musica.artista;
+    box.hidden = false;
+
+    const play = () => {
+      const f = document.createElement("iframe");
+      f.src =
+        "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(C.musica.youtubeId) +
+        "?autoplay=1&rel=0&playsinline=1&modestbranding=1";
+      f.title = C.musica.titulo + " — " + C.musica.artista;
+      f.allow = "autoplay; encrypted-media; picture-in-picture";
+      f.referrerPolicy = "strict-origin-when-cross-origin";
+      f.allowFullscreen = true;
+      frame.innerHTML = "";
+      frame.appendChild(f);
+      player.hidden = false;
+      btn.hidden = true;
+    };
+    const stop = () => {
+      frame.innerHTML = "";
+      player.hidden = true;
+      btn.hidden = false;
+    };
+    btn.addEventListener("click", play);
+    $("#music-close").addEventListener("click", stop);
+  }
+
   /* ---------------- Mural de recados ---------------- */
   const list = $("#msg-list");
   let messages = [];

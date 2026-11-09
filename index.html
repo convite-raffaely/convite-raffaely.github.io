@@ -190,6 +190,24 @@
     <p>15 anos · <span data-cfg="dataTexto"></span></p>
   </footer>
 
+  <!-- Música -->
+  <div class="music" id="music" hidden>
+    <div class="music-player" id="music-player" hidden>
+      <div class="music-head">
+        <div>
+          <strong id="music-title"></strong>
+          <span id="music-artist"></span>
+        </div>
+        <button type="button" class="music-close" id="music-close" aria-label="Parar música">×</button>
+      </div>
+      <div class="music-frame" id="music-frame"></div>
+    </div>
+    <button type="button" class="music-btn" id="music-btn">
+      <svg class="music-icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M212.92,17.71a7.89,7.89,0,0,0-6.86-1.46l-128,32A8,8,0,0,0,72,56V166.1A36,36,0,1,0,88,196V102.25l112-28V134.1A36,36,0,1,0,216,164V24A8,8,0,0,0,212.92,17.71Z"/></svg>
+      <span>Ouvir a música</span>
+    </button>
+  </div>
+
   <!-- Janela do Pix de um presente -->
   <dialog id="gift-dialog" class="dialog">
     <div class="gift-dialog">
