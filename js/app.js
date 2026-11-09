@@ -341,8 +341,32 @@
       player.hidden = true;
       btn.hidden = false;
     };
-    btn.addEventListener("click", play);
-    $("#music-close").addEventListener("click", stop);
+    let playing = false;
+    let stoppedByGuest = false;
+    const start = () => {
+      if (playing) return;
+      playing = true;
+      play();
+    };
+    const halt = () => {
+      playing = false;
+      stoppedByGuest = true;
+      stop();
+    };
+    btn.addEventListener("click", start);
+    $("#music-close").addEventListener("click", halt);
+
+    // Navegadores só liberam som depois que a pessoa interage com a página:
+    // a música começa sozinha no primeiro toque/clique/tecla em qualquer lugar.
+    const firstTouch = (e) => {
+      if (stoppedByGuest || playing) return cleanup();
+      if (e.target.closest && e.target.closest("#music")) return cleanup();
+      start();
+      cleanup();
+    };
+    const evs = ["pointerdown", "keydown", "touchend"];
+    const cleanup = () => evs.forEach((ev) => document.removeEventListener(ev, firstTouch, true));
+    evs.forEach((ev) => document.addEventListener(ev, firstTouch, true));
   }
 
   /* ---------------- Mural de recados ---------------- */
